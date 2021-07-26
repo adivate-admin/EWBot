@@ -9,4 +9,5 @@ yarn.lock
 persist
 .env
 .bot-token
+yarn-error.log
 
