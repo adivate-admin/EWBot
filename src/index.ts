@@ -10,7 +10,7 @@ import express, { Request, Response } from 'express';
 const env = dotenv.config();
 dotenvExpand(env);
 
-/* const token = process.env['BOT_TOKEN'];
+const token = process.env['BOT_TOKEN'];
 if (token === undefined) {
   throw new Error('BOT_TOKEN must be provided!');
 }
@@ -18,7 +18,9 @@ const webhookUrl = process.env['WEBHOOK_URL'];
 if (webhookUrl === undefined) {
   throw new Error('WEBHOOK_URL must be provided!');
 }
+const port = process.env['PORT'] ?? 8443;
 
+/*
 // feedTheDragons();
 // startBot();
 
@@ -40,7 +42,7 @@ app.get('/', (_: Request, res: Response) => res.send('Hello World!'));
 //app.use(bot.webhookCallback(secretPath));
 
 app.listen(8443, () => {
-  console.log('EWBot listening on port 8443!');
+  console.log(`EWBot listening on port ${port}!`);
 });
 
 // No need to call bot.launch()
