@@ -4,13 +4,13 @@ import { start as startBot } from './bot/index.js';
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import express, { Request, Response } from 'express';
-import { Telegraf } from 'telegraf';
+//import { Telegraf } from 'telegraf';
 
 // pull configs from .env:
 const env = dotenv.config();
 dotenvExpand(env);
 
-const token = process.env['BOT_TOKEN'];
+/* const token = process.env['BOT_TOKEN'];
 if (token === undefined) {
   throw new Error('BOT_TOKEN must be provided!');
 }
@@ -31,7 +31,7 @@ const secretPath = `/telegraf/${bot.secretPathComponent()}`;
 // Set telegram webhook
 // npm install -g localtunnel && lt --port 3000
 //bot.telegram.setWebhook(`https://----.localtunnel.me${secretPath}`);
-bot.telegram.setWebhook(webhookUrl);
+bot.telegram.setWebhook(webhookUrl); */
 
 const app = express();
 app.get('/', (_: Request, res: Response) => res.send('Hello World!'));
@@ -40,7 +40,7 @@ app.get('/', (_: Request, res: Response) => res.send('Hello World!'));
 //app.use(bot.webhookCallback(secretPath));
 
 app.listen(8443, () => {
-  console.log('Example app listening on port 8443!');
+  console.log('EWBot listening on port 8443!');
 });
 
 // No need to call bot.launch()
