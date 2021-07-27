@@ -17,14 +17,14 @@ import express, { Request, Response } from 'express';
 const env = dotenv.config();
 dotenvExpand(env);
 
-const token = process.env['BOT_TOKEN'];
+/* const token = process.env['BOT_TOKEN'];
 if (token === undefined) {
   throw new Error('BOT_TOKEN must be provided!');
 }
 const webhookUrl = process.env['WEBHOOK_URL'];
 if (webhookUrl === undefined) {
   throw new Error('WEBHOOK_URL must be provided!');
-}
+} */
 
 /* const bot = new Telegraf(token);
 // Set the bot response
