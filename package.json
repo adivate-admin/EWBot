@@ -7,11 +7,11 @@
     "license": "MIT",
     "scripts": {
         "build": "del-cli dist && tsc",
-        "start": "node --loader ts-node/esm src/index.ts",
+        "start": "ts-node src/index.ts",
+        "startx": "node --loader ts-node/esm src/index.ts",
         "test": "tsc --sourceMap && xo && ava",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""
     },
-    "type": "module",
     "engines": {
         "node": ">=14"
     },
