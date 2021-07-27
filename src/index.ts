@@ -11,7 +11,7 @@ startBot();
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import express, { Request, Response } from 'express';
-import { Telegraf } from 'telegraf';
+// import { Telegraf } from 'telegraf';
 
 // pull configs from .env:
 const env = dotenv.config();
@@ -26,7 +26,7 @@ if (webhookUrl === undefined) {
   throw new Error('WEBHOOK_URL must be provided!');
 }
 
-const bot = new Telegraf(token);
+/* const bot = new Telegraf(token);
 // Set the bot response
 bot.on('text', ctx => ctx.replyWithHTML('<b>Hello</b>'));
 
@@ -35,13 +35,13 @@ const secretPath = `/telegraf/${bot.secretPathComponent()}`;
 // Set telegram webhook
 // npm install -g localtunnel && lt --port 3000
 //bot.telegram.setWebhook(`https://----.localtunnel.me${secretPath}`);
-bot.telegram.setWebhook(webhookUrl);
+bot.telegram.setWebhook(webhookUrl); */
 
 const app = express();
 app.get('/', (_: Request, res: Response) => res.send('Hello World!'));
 
 // Set the bot API endpoint
-app.use(bot.webhookCallback(secretPath));
+//app.use(bot.webhookCallback(secretPath));
 
 app.listen(3000, () => {
   console.log('Example app listening on port 3000!');
