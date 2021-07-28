@@ -7,7 +7,7 @@
     "license": "MIT",
     "scripts": {
         "build": "del-cli dist && tsc",
-        "postinstall": "del-cli dist && tsc",
+        "postinstall": "tsc",
         "start": "ts-node src/index.ts",
         "startx": "node --loader ts-node/esm src/index.ts",
         "test": "tsc --sourceMap && xo && ava",
