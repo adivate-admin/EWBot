@@ -18,7 +18,7 @@ const webhookUrl = process.env['WEBHOOK_URL'];
 if (webhookUrl === undefined) {
   throw new Error('WEBHOOK_URL must be provided!');
 }
-const port = process.env['PORT'] ?? 8443;
+const port = process.env['PORT'] || 8443;
 
 /*
 // feedTheDragons();
@@ -41,7 +41,7 @@ app.get('/', (_: Request, res: Response) => res.send('Hello World!'));
 // Set the bot API endpoint
 //app.use(bot.webhookCallback(secretPath));
 
-app.listen(8443, () => {
+app.listen(port, () => {
   console.log(`EWBot listening on port ${port}!`);
 });
 
