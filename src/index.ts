@@ -4,7 +4,7 @@
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import express, { Request, Response } from 'express';
-//import { Telegraf } from 'telegraf';
+import { Telegraf } from 'telegraf';
 
 // pull configs from .env:
 const env = dotenv.config();
@@ -20,7 +20,6 @@ if (webhookUrl === undefined) {
 }
 const port = process.env['PORT'] || 8443;
 
-/*
 // feedTheDragons();
 // startBot();
 
@@ -33,7 +32,7 @@ const secretPath = `/telegraf/${bot.secretPathComponent()}`;
 // Set telegram webhook
 // npm install -g localtunnel && lt --port 3000
 //bot.telegram.setWebhook(`https://----.localtunnel.me${secretPath}`);
-bot.telegram.setWebhook(webhookUrl); */
+bot.telegram.setWebhook(webhookUrl);
 
 const app = express();
 app.get('/', (_: Request, res: Response) => res.send('EWBot says hello!'));
