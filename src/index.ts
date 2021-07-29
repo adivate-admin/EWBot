@@ -36,7 +36,7 @@ const secretPath = `/telegraf/${bot.secretPathComponent()}`;
 bot.telegram.setWebhook(webhookUrl); */
 
 const app = express();
-app.get('/', (_: Request, res: Response) => res.send('Hello World!'));
+app.get('/', (_: Request, res: Response) => res.send('EWBot says hello!'));
 
 // Set the bot API endpoint
 //app.use(bot.webhookCallback(secretPath));
