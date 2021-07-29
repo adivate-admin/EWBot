@@ -3,7 +3,6 @@
 coverage
 dist
 node_modules
-yarn.lock
 
 # botfiles
 persist
