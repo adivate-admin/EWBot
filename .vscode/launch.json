@@ -7,8 +7,16 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "Debug Bot",
       "program": "${workspaceFolder}/src/index.ts",
+      "preLaunchTask": "Compile",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Current TS",
+      "program": "${file}",
       "preLaunchTask": "Compile",
       "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     }
