@@ -1,5 +1,5 @@
 // import { feedTheDragons } from './magic/index.js';
-import { start as startBot } from './bot/index.js';
+//import { start as startBot } from './bot/index.js';
 
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
