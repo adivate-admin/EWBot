@@ -6,7 +6,7 @@
     "outDir": "./dist",
     "strict": true,
     "target": "es2019",
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "noEmitOnError": true,
     "baseUrl": "./",
     "incremental": false,
