@@ -4,6 +4,7 @@
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import { Telegraf, Markup } from 'telegraf';
+const { reply, fork } = Telegraf;
 
 // pull configs from .env:
 const env = dotenv.config();
@@ -33,6 +34,7 @@ bot.help(ctx => ctx.reply('Send me a sticker'));
 bot.on('sticker', ctx => ctx.reply('👍'));
 bot.hears('hi', ctx => ctx.reply('Hey there'));
 bot.on('text', ctx => ctx.replyWithHTML('<b>Hello</b>'));
+bot.command('foo', reply('http://coub.com/view/9cjmt'));
 
 bot.launch();
 
