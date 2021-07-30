@@ -5,6 +5,7 @@
     "author": "rob@adivate.net",
     "private": false,
     "license": "MIT",
+    "main": "dist/src/index.js",
     "scripts": {
         "build": "del-cli dist && tsc",
         "postinstall": "yarn build",
