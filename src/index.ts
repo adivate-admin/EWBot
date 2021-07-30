@@ -47,11 +47,11 @@ const getWeather = async (city: string): Promise<string> => {
       } (${responseJson.weather[0].weather.description})`;
     } else {
       console.log('City not found...');
-      return 'city not found';
+      return 'City not found';
     }
   } catch {
     console.log('Error getting weather...');
-    return '';
+    return 'Error getting weather...';
   }
 };
 
