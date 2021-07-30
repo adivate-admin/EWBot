@@ -24,52 +24,52 @@ const cToK = function (c: number) {
   return c + 273.15;
 };
 
-const main = async () => {
-  const token = process.env['BOT_TOKEN'];
-  if (token === undefined) {
-    throw new Error('BOT_TOKEN must be provided!');
-  }
-  const openWeatherApiKey = process.env['OPENWEATHER_API_KEY'];
+//const main = async () => {
+const token = process.env['BOT_TOKEN'];
+if (token === undefined) {
+  throw new Error('BOT_TOKEN must be provided!');
+}
+const openWeatherApiKey = process.env['OPENWEATHER_API_KEY'];
 
-  const randomPhoto = 'https://picsum.photos/200/300/?random';
+const randomPhoto = 'https://picsum.photos/200/300/?random';
 
-  const sayYoMiddleware = fork(ctx => ctx.reply('yo'));
+const sayYoMiddleware = fork(ctx => ctx.reply('yo'));
 
-  const getWeather = async (city: string): Promise<string> => {
-    console.log('Getting weather for: ' + city);
-    try {
-      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${openWeatherApiKey}`;
-      const response: any = await fetch(apiUrl);
-      const responseJson = await response.json();
-      if (responseJson.weather[0]) {
-        return `Weather in ${city}: Temp ${kToC(responseJson.main.temp)}, ${
-          responseJson.weather[0].weather.main
-        } (${responseJson.weather[0].weather.description})`;
-      } else {
-        console.log('City not found...');
-        return 'city not found';
-      }
-    } catch {
-      console.log('Error getting weather...');
-      return '';
+const getWeather = async (city: string): Promise<string> => {
+  console.log('Getting weather for: ' + city);
+  try {
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${openWeatherApiKey}`;
+    const response: any = await fetch(apiUrl);
+    const responseJson = await response.json();
+    if (responseJson.weather[0]) {
+      return `Weather in ${city}: Temp ${kToC(responseJson.main.temp)}C, ${
+        responseJson.weather[0].weather.main
+      } (${responseJson.weather[0].weather.description})`;
+    } else {
+      console.log('City not found...');
+      return 'city not found';
     }
-  };
-
-  interface SessionData {
-    heyCounter: number;
+  } catch {
+    console.log('Error getting weather...');
+    return '';
   }
+};
 
-  interface BotContext extends Context {
-    session?: SessionData;
-  }
+interface SessionData {
+  heyCounter: number;
+}
 
-  const bot = new Telegraf<BotContext>(token);
+interface BotContext extends Context {
+  session?: SessionData;
+}
 
-  // // Register session middleware
-  bot.use(session());
+const bot = new Telegraf<BotContext>(token);
 
-  // Register logger middleware
-  /* bot.use((ctx, next) => {
+// // Register session middleware
+bot.use(session());
+
+// Register logger middleware
+/* bot.use((ctx, next) => {
     const start = Date.now();
     return next().then(() => {
       const ms = Date.now() - start;
@@ -77,14 +77,14 @@ const main = async () => {
     });
   }); */
 
-  // Login widget events
-  bot.on('connected_website', ctx => ctx.reply('Website connected'));
+// Login widget events
+bot.on('connected_website', ctx => ctx.reply('Website connected'));
 
-  // Telegram passport events
-  bot.on('passport_data', ctx => ctx.reply('Telegram password connected'));
+// Telegram passport events
+bot.on('passport_data', ctx => ctx.reply('Telegram password connected'));
 
-  // Random location on some text messages
-  /* bot.on('text', (ctx, next) => {
+// Random location on some text messages
+/* bot.on('text', (ctx, next) => {
     if (Math.random() > 0.2) {
       return next();
     }
@@ -94,41 +94,41 @@ const main = async () => {
     ]);
   }); */
 
-  // Text messages handling
-  bot.hears('Hey', sayYoMiddleware, ctx => {
-    ctx.session ??= { heyCounter: 0 };
-    ctx.session.heyCounter++;
-    return ctx.replyWithMarkdown(`_Hey counter:_ ${ctx.session.heyCounter}`);
-  });
+// Text messages handling
+bot.hears('Hey', sayYoMiddleware, ctx => {
+  ctx.session ??= { heyCounter: 0 };
+  ctx.session.heyCounter++;
+  return ctx.replyWithMarkdown(`_Hey counter:_ ${ctx.session.heyCounter}`);
+});
 
-  // Command handling
-  bot.command('answer', sayYoMiddleware, ctx => {
-    console.log(ctx.message);
-    return ctx.replyWithMarkdownV2('*42*');
-  });
+// Command handling
+bot.command('answer', sayYoMiddleware, ctx => {
+  console.log(ctx.message);
+  return ctx.replyWithMarkdownV2('*42*');
+});
 
-  bot.command('cat', ctx => ctx.replyWithPhoto(randomPhoto));
+bot.command('cat', ctx => ctx.replyWithPhoto(randomPhoto));
 
-  // Streaming photo, in case Telegram doesn't accept direct URL
-  bot.command('cat2', ctx => ctx.replyWithPhoto({ url: randomPhoto }));
+// Streaming photo, in case Telegram doesn't accept direct URL
+bot.command('cat2', ctx => ctx.replyWithPhoto({ url: randomPhoto }));
 
-  // Look ma, reply middleware factory
-  bot.command('foo', reply('https://adivate.net'));
+// Look ma, reply middleware factory
+bot.command('foo', reply('https://adivate.net'));
 
-  // Wow! RegEx
-  bot.hears(/reverse (.+)/, ctx =>
-    ctx.reply(ctx.match[1].split('').reverse().join('')),
-  );
+// Wow! RegEx
+bot.hears(/reverse (.+)/, ctx =>
+  ctx.reply(ctx.match[1].split('').reverse().join('')),
+);
 
-  bot.command('weather', async ctx =>
-    ctx.reply(await getWeather(ctx.update.message.text.split(' ')[1])),
-  );
+bot.command('weather', async ctx =>
+  ctx.reply(await getWeather(ctx.update.message.text.split(' ')[1])),
+);
 
-  bot.on('inline_query', async ctx => {
-    console.log(ctx.inlineQuery.query);
-  });
+bot.on('inline_query', async ctx => {
+  console.log(ctx.inlineQuery.query);
+});
 
-  /* bot.on('inline_query', async ctx => {
+/* bot.on('inline_query', async ctx => {
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${ctx.inlineQuery.query}&APPID=${openWeatherApiKey}`;
     const response = await fetch(apiUrl);
     const { results } = await response.json();
@@ -156,15 +156,15 @@ const main = async () => {
     console.log('chosen inline result', chosenInlineResult);
   }); */
 
-  // Launch bot
-  bot.launch();
+// Launch bot
+bot.launch();
 
-  // Enable graceful stop
-  process.once('SIGINT', () => bot.stop('SIGINT'));
-  process.once('SIGTERM', () => bot.stop('SIGTERM'));
-  console.log('EWBot started...');
-};
-
-main()
-  .catch(error => console.log(error))
-  .finally(() => process.exit());
+// Enable graceful stop
+process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM'));
+console.log('EWBot running...');
+//};
+//
+//main()
+//  .catch(error => console.log(error))
+//  .finally(() => process.exit());
