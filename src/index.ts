@@ -21,6 +21,7 @@ const randomPhoto = 'https://picsum.photos/200/300/?random';
 const sayYoMiddleware = fork(ctx => ctx.reply('yo'));
 
 const getWeather = (city: string): string => {
+  console.log('Getting weather for: ' + city);
   return `Weather in ${city}: cold`;
 };
 
