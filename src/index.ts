@@ -14,10 +14,15 @@ const token = process.env['BOT_TOKEN'];
 if (token === undefined) {
   throw new Error('BOT_TOKEN must be provided!');
 }
+const openWeatherApiKey = process.env['OPENWEATHER_API_KEY'];
 
 const randomPhoto = 'https://picsum.photos/200/300/?random';
 
 const sayYoMiddleware = fork(ctx => ctx.reply('yo'));
+
+const getWeather = (city: string): string => {
+  return `Weather in ${city}: cold`;
+};
 
 interface SessionData {
   heyCounter: number;
@@ -84,8 +89,12 @@ bot.hears(/reverse (.+)/, ctx =>
   ctx.reply(ctx.match[1].split('').reverse().join('')),
 );
 
-bot.on('inline_query', async ctx => {
-  const apiUrl = `https://recipepuppy.com/api/?q=${ctx.inlineQuery.query}`;
+bot.command('weather', ctx =>
+  ctx.reply(getWeather(ctx.update.message.text.split(' ')[1])),
+);
+
+/* bot.on('inline_query', async ctx => {
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${ctx.inlineQuery.query}&APPID=${openWeatherApiKey}`;
   const response = await fetch(apiUrl);
   const { results } = await response.json();
   const recipes = results
@@ -110,7 +119,7 @@ bot.on('inline_query', async ctx => {
 
 bot.on('chosen_inline_result', ({ chosenInlineResult }) => {
   console.log('chosen inline result', chosenInlineResult);
-});
+}); */
 
 // Launch bot
 bot.launch();
