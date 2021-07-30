@@ -4,6 +4,7 @@
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import express, { Request, Response } from 'express';
+import path from 'path';
 import { Telegraf } from 'telegraf';
 
 // pull configs from .env:
@@ -32,10 +33,13 @@ const secretPath = `/telegraf/${bot.secretPathComponent()}`;
 // Set telegram webhook
 // npm install -g localtunnel && lt --port 3000
 //bot.telegram.setWebhook(`https://----.localtunnel.me${secretPath}`);
-bot.telegram.setWebhook(webhookUrl);
+const telegramPath = path.join(webhookUrl, secretPath);
+bot.telegram.setWebhook(telegramPath);
 
 const app = express();
-app.get('/', (_: Request, res: Response) => res.send('EWBot says hello!'));
+app.get('/', (_: Request, res: Response) =>
+  res.send(`EWBot says hello! Telegram path: ${telegramPath}`),
+);
 
 // Set the bot API endpoint
 //app.use(bot.webhookCallback(secretPath));
