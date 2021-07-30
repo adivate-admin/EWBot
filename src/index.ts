@@ -24,7 +24,9 @@ const getWeather = async (city: string): Promise<string> => {
   console.log('Getting weather for: ' + city);
   const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${openWeatherApiKey}`;
   const response = await fetch(apiUrl);
-  return `Weather in ${city}: cold`;
+  const responseJson = await response.json();
+
+  return `Weather in ${city}: ${responseJson.weather.description}`;
 };
 
 interface SessionData {
