@@ -85,7 +85,7 @@ bot.hears(/reverse (.+)/, ctx =>
 );
 
 bot.on('inline_query', async ctx => {
-  const apiUrl = `http://recipepuppy.com/api/?q=${ctx.inlineQuery.query}`;
+  const apiUrl = `https://recipepuppy.com/api/?q=${ctx.inlineQuery.query}`;
   const response = await fetch(apiUrl);
   const { results } = await response.json();
   const recipes = results
