@@ -23,6 +23,12 @@ const kToC = function (k: number) {
 const cToK = function (c: number) {
   return c + 273.15;
 };
+const kToF = function (k: number) {
+  return cToF(kToC(k));
+};
+const fToK = function (f: number) {
+  return cToK(fToC(f));
+};
 
 //const main = async () => {
 const token = process.env['BOT_TOKEN'];
@@ -50,9 +56,9 @@ const getWeather = async (city: string): Promise<string> => {
   return `Weather in ${responseJson.name}: Temp ${round(
     kToC(responseJson.main.temp),
     1,
-  )}C, ${responseJson.weather[0].main} (${
-    responseJson.weather[0].description
-  })`;
+  )}C/${round(kToF(responseJson.main.temp), 1)}F, ${
+    responseJson.weather[0].main
+  } (${responseJson.weather[0].description})`;
   //} else {
   //  console.log('City not found...');
   //  return 'City not found';
@@ -63,7 +69,7 @@ const getWeather = async (city: string): Promise<string> => {
   //}
 };
 
-const s = getWeather('London').then(s => console.log(s));
+//const s = getWeather('London').then(s => console.log(s));
 
 interface SessionData {
   heyCounter: number;
