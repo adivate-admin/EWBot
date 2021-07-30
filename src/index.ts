@@ -33,6 +33,11 @@ const openWeatherApiKey = process.env['OPENWEATHER_API_KEY'];
 
 const randomPhoto = 'https://picsum.photos/200/300/?random';
 
+function round(value: number, precision: number) {
+  var multiplier = Math.pow(10, precision || 0);
+  return Math.round(value * multiplier) / multiplier;
+}
+
 const sayYoMiddleware = fork(ctx => ctx.reply('yo'));
 
 const getWeather = async (city: string): Promise<string> => {
@@ -42,9 +47,12 @@ const getWeather = async (city: string): Promise<string> => {
   const response: any = await fetch(apiUrl);
   const responseJson = await response.json();
   //if (responseJson.weather[0]) {
-  return `Weather in ${city}: Temp ${kToC(responseJson.main.temp)}C, ${
-    responseJson.weather[0].main
-  } (${responseJson.weather[0].description})`;
+  return `Weather in ${city}: Temp ${round(
+    kToC(responseJson.main.temp),
+    1,
+  )}C, ${responseJson.weather[0].main} (${
+    responseJson.weather[0].description
+  })`;
   //} else {
   //  console.log('City not found...');
   //  return 'City not found';
