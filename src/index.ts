@@ -24,7 +24,7 @@ const getWeather = async (city: string): Promise<string> => {
   console.log('Getting weather for: ' + city);
   const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${openWeatherApiKey}`;
   const response = await fetch(apiUrl);
-  const responseJson = await response.json();
+  const responseJson = JSON.parse(await response.json());
 
   return `Weather in ${city}: ${responseJson.weather.description}`;
 };
@@ -97,6 +97,10 @@ bot.hears(/reverse (.+)/, ctx =>
 bot.command('weather', async ctx =>
   ctx.reply(await getWeather(ctx.update.message.text.split(' ')[1])),
 );
+
+bot.on('inline_query', async ctx => {
+  console.log(ctx.inlineQuery.query);
+});
 
 /* bot.on('inline_query', async ctx => {
   const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${ctx.inlineQuery.query}&APPID=${openWeatherApiKey}`;
