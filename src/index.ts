@@ -11,6 +11,19 @@ const fetch = require('node-fetch').default;
 const env = dotenv.config();
 dotenvExpand(env);
 
+const cToF = function (c: number) {
+  return (c * 9) / 5 + 32;
+};
+const fToC = function (f: number) {
+  return ((f - 32) * 5) / 9;
+};
+const kToC = function (k: number) {
+  return k - 273.15;
+};
+const cToK = function (c: number) {
+  return c + 273.15;
+};
+
 const main = async () => {
   const token = process.env['BOT_TOKEN'];
   if (token === undefined) {
@@ -29,7 +42,9 @@ const main = async () => {
       const response: any = await fetch(apiUrl);
       const responseJson = await response.json();
       if (responseJson.weather[0]) {
-        return `Weather in ${city}: Temp ${responseJson.main.temp}, ${responseJson.weather[0].weather.main} (${responseJson.weather[0].weather.description})`;
+        return `Weather in ${city}: Temp ${kToC(responseJson.main.temp)}, ${
+          responseJson.weather[0].weather.main
+        } (${responseJson.weather[0].weather.description})`;
       } else {
         console.log('City not found...');
         return 'city not found';
