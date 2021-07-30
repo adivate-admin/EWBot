@@ -56,7 +56,7 @@ const getWeather = async (city: string): Promise<string> => {
   return `Weather in ${responseJson.name}: Temp ${round(
     kToC(responseJson.main.temp),
     1,
-  )}C/${round(kToF(responseJson.main.temp), 1)}F, ${
+  )}C / ${round(kToF(responseJson.main.temp), 1)}F, ${
     responseJson.weather[0].main
   } (${responseJson.weather[0].description})`;
   //} else {
