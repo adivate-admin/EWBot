@@ -47,7 +47,7 @@ const getWeather = async (city: string): Promise<string> => {
   const response: any = await fetch(apiUrl);
   const responseJson = await response.json();
   //if (responseJson.weather[0]) {
-  return `Weather in ${city}: Temp ${round(
+  return `Weather in ${responseJson.name}: Temp ${round(
     kToC(responseJson.main.temp),
     1,
   )}C, ${responseJson.weather[0].main} (${
