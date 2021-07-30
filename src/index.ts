@@ -43,8 +43,8 @@ const getWeather = async (city: string): Promise<string> => {
     const responseJson = await response.json();
     if (responseJson.weather[0]) {
       return `Weather in ${city}: Temp ${kToC(responseJson.main.temp)}C, ${
-        responseJson.weather[0].weather.main
-      } (${responseJson.weather[0].weather.description})`;
+        responseJson.weather[0].main
+      } (${responseJson.weather[0].description})`;
     } else {
       console.log('City not found...');
       return 'City not found';
