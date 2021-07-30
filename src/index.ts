@@ -24,10 +24,15 @@ const main = async () => {
 
   const getWeather = async (city: string): Promise<string> => {
     console.log('Getting weather for: ' + city);
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${openWeatherApiKey}`;
-    const response = await fetch(apiUrl);
-    const responseJson = await response.json();
-    return `Weather in ${city}: ${responseJson.weather[0].description}`;
+    try {
+      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${openWeatherApiKey}`;
+      const response = await fetch(apiUrl);
+      const responseJson = await response.json();
+      return `Weather in ${city}: ${responseJson.weather[0].main} (${responseJson.weather[0].description})`;
+    } catch {
+      console.log('Error getting weather...');
+      return '';
+    }
   };
 
   interface SessionData {
