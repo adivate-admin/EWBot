@@ -35,7 +35,7 @@ bot.on('sticker', ctx => ctx.reply('👍'));
 bot.hears('hi', ctx => ctx.reply('Hey there'));
 bot.on('text', ctx => ctx.replyWithHTML('<b>Hello</b>'));
 bot.command('foo', reply('http://coub.com/view/9cjmt'));
-
+bot.command('foo2', reply('http://coub.com/view/9cjmt'));
 bot.launch();
 
 // Enable graceful stop
