@@ -37,23 +37,25 @@ const sayYoMiddleware = fork(ctx => ctx.reply('yo'));
 
 const getWeather = async (city: string): Promise<string> => {
   console.log('Getting weather for: ' + city);
-  try {
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${openWeatherApiKey}`;
-    const response: any = await fetch(apiUrl);
-    const responseJson = await response.json();
-    if (responseJson.weather[0]) {
-      return `Weather in ${city}: Temp ${kToC(responseJson.main.temp)}C, ${
-        responseJson.weather[0].main
-      } (${responseJson.weather[0].description})`;
-    } else {
-      console.log('City not found...');
-      return 'City not found';
-    }
-  } catch {
-    console.log('Error getting weather...');
-    return 'Error getting weather...';
-  }
+  //try {
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${openWeatherApiKey}`;
+  const response: any = await fetch(apiUrl);
+  const responseJson = await response.json();
+  //if (responseJson.weather[0]) {
+  return `Weather in ${city}: Temp ${kToC(responseJson.main.temp)}C, ${
+    responseJson.weather[0].main
+  } (${responseJson.weather[0].description})`;
+  //} else {
+  //  console.log('City not found...');
+  //  return 'City not found';
+  //}
+  //} catch {
+  //  console.log('Error getting weather...');
+  //  return 'Error getting weather...';
+  //}
 };
+
+const s = getWeather('London').then(s => console.log(s));
 
 interface SessionData {
   heyCounter: number;
