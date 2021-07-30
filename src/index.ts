@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import { Context, Telegraf, session, Markup } from 'telegraf';
 const { reply, fork } = Telegraf;
+const fetch = require('node-fetch').default;
 
 // pull configs from .env:
 const env = dotenv.config();
@@ -76,12 +77,40 @@ bot.command('cat', ctx => ctx.replyWithPhoto(randomPhoto));
 bot.command('cat2', ctx => ctx.replyWithPhoto({ url: randomPhoto }));
 
 // Look ma, reply middleware factory
-bot.command('foo', reply('http://coub.com/view/9cjmt'));
+bot.command('foo', reply('https://adivate.net'));
 
 // Wow! RegEx
 bot.hears(/reverse (.+)/, ctx =>
   ctx.reply(ctx.match[1].split('').reverse().join('')),
 );
+
+bot.on('inline_query', async ctx => {
+  const apiUrl = `http://recipepuppy.com/api/?q=${ctx.inlineQuery.query}`;
+  const response = await fetch(apiUrl);
+  const { results } = await response.json();
+  const recipes = results
+    // @ts-ignore
+    .filter(({ thumbnail }) => thumbnail)
+    // @ts-ignore
+    .map(({ title, href, thumbnail }) => ({
+      type: 'article',
+      id: thumbnail,
+      title: title,
+      description: title,
+      thumb_url: thumbnail,
+      input_message_content: {
+        message_text: title,
+      },
+      reply_markup: Markup.inlineKeyboard([
+        Markup.button.url('Go to recipe', href),
+      ]),
+    }));
+  return await ctx.answerInlineQuery(recipes);
+});
+
+bot.on('chosen_inline_result', ({ chosenInlineResult }) => {
+  console.log('chosen inline result', chosenInlineResult);
+});
 
 // Launch bot
 bot.launch();
