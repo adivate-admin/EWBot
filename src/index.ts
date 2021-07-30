@@ -26,9 +26,14 @@ const main = async () => {
     console.log('Getting weather for: ' + city);
     try {
       const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${openWeatherApiKey}`;
-      const response = await fetch(apiUrl);
+      const response: any = await fetch(apiUrl);
       const responseJson = await response.json();
-      return `Weather in ${city}: ${responseJson.weather[0].main} (${responseJson.weather[0].description})`;
+      if (responseJson.weather[0]) {
+        return `Weather in ${city}: Temp ${responseJson.main.temp}, ${responseJson.weather[0].weather.main} (${responseJson.weather[0].weather.description})`;
+      } else {
+        console.log('City not found...');
+        return 'city not found';
+      }
     } catch {
       console.log('Error getting weather...');
       return '';
