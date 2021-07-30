@@ -20,8 +20,10 @@ const randomPhoto = 'https://picsum.photos/200/300/?random';
 
 const sayYoMiddleware = fork(ctx => ctx.reply('yo'));
 
-const getWeather = (city: string): string => {
+const getWeather = async (city: string): Promise<string> => {
   console.log('Getting weather for: ' + city);
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${openWeatherApiKey}`;
+  const response = await fetch(apiUrl);
   return `Weather in ${city}: cold`;
 };
 
@@ -39,13 +41,13 @@ const bot = new Telegraf<BotContext>(token);
 bot.use(session());
 
 // Register logger middleware
-bot.use((ctx, next) => {
+/* bot.use((ctx, next) => {
   const start = Date.now();
   return next().then(() => {
     const ms = Date.now() - start;
     console.log('response time %sms', ms);
   });
-});
+}); */
 
 // Login widget events
 bot.on('connected_website', ctx => ctx.reply('Website connected'));
@@ -54,7 +56,7 @@ bot.on('connected_website', ctx => ctx.reply('Website connected'));
 bot.on('passport_data', ctx => ctx.reply('Telegram password connected'));
 
 // Random location on some text messages
-bot.on('text', (ctx, next) => {
+/* bot.on('text', (ctx, next) => {
   if (Math.random() > 0.2) {
     return next();
   }
@@ -62,7 +64,7 @@ bot.on('text', (ctx, next) => {
     ctx.replyWithLocation(Math.random() * 180 - 90, Math.random() * 180 - 90),
     next(),
   ]);
-});
+}); */
 
 // Text messages handling
 bot.hears('Hey', sayYoMiddleware, ctx => {
@@ -90,8 +92,8 @@ bot.hears(/reverse (.+)/, ctx =>
   ctx.reply(ctx.match[1].split('').reverse().join('')),
 );
 
-bot.command('weather', ctx =>
-  ctx.reply(getWeather(ctx.update.message.text.split(' ')[1])),
+bot.command('weather', async ctx =>
+  ctx.reply(await getWeather(ctx.update.message.text.split(' ')[1])),
 );
 
 /* bot.on('inline_query', async ctx => {
