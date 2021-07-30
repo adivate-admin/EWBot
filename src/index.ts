@@ -33,7 +33,7 @@ bot.start(ctx => ctx.reply('Welcome'));
 bot.help(ctx => ctx.reply('Send me a sticker'));
 bot.on('sticker', ctx => ctx.reply('👍'));
 bot.hears('hi', ctx => ctx.reply('Hey there'));
-bot.on('text', ctx => ctx.replyWithHTML('<b>Hello</b>'));
+//bot.on('text', ctx => ctx.replyWithHTML('<b>Hello</b>'));
 bot.command('foo', ctx => ctx.reply('htts://google.com'));
 bot.command('foo2', ctx => ctx.reply('https://adivate.net'));
 bot.launch();
