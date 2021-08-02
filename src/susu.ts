@@ -9,6 +9,11 @@ import { mainModule } from 'process';
 const env = dotenv.config();
 dotenvExpand(env);
 
+function round(value: number, precision: number) {
+  var multiplier = Math.pow(10, precision || 0);
+  return Math.round(value * multiplier) / multiplier;
+}
+
 const getSusu = async (currency = 'USD'): Promise<number> => {
   const data = JSON.stringify({
     currency: currency,
@@ -33,7 +38,7 @@ const getSusu = async (currency = 'USD'): Promise<number> => {
 
 async function main() {
   const currency = 'USD';
-  console.log(`SUSU/${currency}=${await getSusu(currency)}`);
+  console.log(`SUSU/${currency}=${round(await getSusu(currency), 3)}`);
 }
 
 main()

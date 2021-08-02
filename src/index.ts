@@ -36,6 +36,7 @@ function round(value: number, precision: number) {
 const sayYoMiddleware = fork(ctx => ctx.reply('yo'));
 
 const getSusu = async (currency = 'USD'): Promise<number> => {
+  console.log('Getting SUSU price in ' + currency);
   const data = JSON.stringify({
     currency: currency,
     code: 'SUSU',
@@ -159,7 +160,7 @@ bot.command('susu', async ctx => {
   if (currency !== 'USD' && currency !== 'EUR') {
     currency = 'USD';
   }
-  ctx.reply(`SUSU/${currency}=${await getSusu(currency)}`);
+  ctx.reply(`SUSU/${currency}=${round(await getSusu(currency), 3)}`);
 });
 
 bot.on('inline_query', async ctx => {
