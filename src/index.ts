@@ -35,11 +35,11 @@ function round(value: number, precision: number) {
 
 const sayYoMiddleware = fork(ctx => ctx.reply('yo'));
 
-const getSusu = async (currency = 'USD'): Promise<number> => {
-  console.log('Getting SUSU price in ' + currency);
+const getPrice = async (symbol = 'EWT', currency = 'USD'): Promise<number> => {
+  console.log(`Getting ${symbol} price in ${currency}`);
   const data = JSON.stringify({
     currency: currency,
-    code: 'SUSU',
+    code: symbol,
     meta: true,
   });
 
@@ -160,7 +160,18 @@ bot.command('susu', async ctx => {
   if (currency !== 'USD' && currency !== 'EUR') {
     currency = 'USD';
   }
-  ctx.reply(`SUSU/${currency}=${round(await getSusu(currency), 3)}`);
+  ctx.reply(`SUSU/${currency}=${round(await getPrice('SUSU', currency), 3)}`);
+});
+
+bot.command('ewt', async ctx => {
+  let currency = 'USD';
+  try {
+    currency = ctx.update.message.text.split(' ')[1];
+  } catch {}
+  if (currency !== 'USD' && currency !== 'EUR') {
+    currency = 'USD';
+  }
+  ctx.reply(`SUSU/${currency}=${round(await getPrice('EWT', currency), 3)}`);
 });
 
 bot.on('inline_query', async ctx => {

@@ -14,10 +14,10 @@ function round(value: number, precision: number) {
   return Math.round(value * multiplier) / multiplier;
 }
 
-const getSusu = async (currency = 'USD'): Promise<number> => {
+const getPrice = async (symbol = 'EWT', currency = 'USD'): Promise<number> => {
   const data = JSON.stringify({
     currency: currency,
-    code: 'SUSU',
+    code: symbol,
     meta: true,
   });
 
@@ -38,7 +38,8 @@ const getSusu = async (currency = 'USD'): Promise<number> => {
 
 async function main() {
   const currency = 'USD';
-  console.log(`SUSU/${currency}=${round(await getSusu(currency), 3)}`);
+  console.log(`SUSU/${currency}=${round(await getPrice('SUSU', currency), 3)}`);
+  console.log(`EWT/${currency}=${round(await getPrice('EWT', currency), 3)}`);
 }
 
 main()
