@@ -4,31 +4,20 @@ import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import { mainModule } from 'process';
 import { Context, Telegraf, session, Markup } from 'telegraf';
-const { reply, fork } = Telegraf;
+import axios, { AxiosRequestConfig } from 'axios';
 const fetch = require('node-fetch').default;
+const { reply, fork } = Telegraf;
 
 // pull configs from .env:
 const env = dotenv.config();
 dotenvExpand(env);
 
-const cToF = function (c: number) {
-  return (c * 9) / 5 + 32;
-};
-const fToC = function (f: number) {
-  return ((f - 32) * 5) / 9;
-};
-const kToC = function (k: number) {
-  return k - 273.15;
-};
-const cToK = function (c: number) {
-  return c + 273.15;
-};
-const kToF = function (k: number) {
-  return cToF(kToC(k));
-};
-const fToK = function (f: number) {
-  return cToK(fToC(f));
-};
+const cToF = (c: number) => (c * 9) / 5 + 32;
+const fToC = (f: number) => ((f - 32) * 5) / 9;
+const kToC = (k: number) => k - 273.15;
+const cToK = (c: number) => c + 273.15;
+const kToF = (k: number) => cToF(kToC(k));
+const fToK = (f: number) => cToK(fToC(f));
 
 //const main = async () => {
 const token = process.env['BOT_TOKEN'];
@@ -45,6 +34,28 @@ function round(value: number, precision: number) {
 }
 
 const sayYoMiddleware = fork(ctx => ctx.reply('yo'));
+
+const getSusu = async (currency = 'USD'): Promise<number> => {
+  const data = JSON.stringify({
+    currency: currency,
+    code: 'SUSU',
+    meta: true,
+  });
+
+  const config: AxiosRequestConfig = {
+    method: 'post',
+    url: 'https://api.livecoinwatch.com/coins/single',
+    headers: {
+      'content-type': 'application/json',
+      'x-api-key': process.env['LIVECOINWATCH_API_KEY'],
+    },
+    data: data,
+  };
+
+  const response = await axios(config);
+  const responseJson: any = JSON.parse(response.data);
+  return responseJson.rate;
+};
 
 const getWeather = async (city: string): Promise<string> => {
   console.log('Getting weather for: ' + city);
@@ -138,6 +149,10 @@ bot.hears(/reverse (.+)/, ctx =>
 
 bot.command('weather', async ctx =>
   ctx.reply(await getWeather(ctx.update.message.text.split(' ')[1])),
+);
+
+bot.command('susu', async ctx =>
+  ctx.reply('SUSU/USD=' + (await getSusu('USD'))),
 );
 
 bot.on('inline_query', async ctx => {
