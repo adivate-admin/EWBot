@@ -4,6 +4,9 @@ EnergyWeb telegram bot.
 
 ### NOTES:
 
+susu - Get SUSU Price, specify USD or EUR
+ewt - Get EWT Price, specify USD or EUR
+
 set BOT_TOKEN from BotFather in .env file
 then:
 mkdir persist

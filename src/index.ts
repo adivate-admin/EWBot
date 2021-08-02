@@ -171,7 +171,7 @@ bot.command('ewt', async ctx => {
   if (currency !== 'USD' && currency !== 'EUR') {
     currency = 'USD';
   }
-  ctx.reply(`SUSU/${currency}=${round(await getPrice('EWT', currency), 3)}`);
+  ctx.reply(`EWT/${currency}=${round(await getPrice('EWT', currency), 3)}`);
 });
 
 bot.on('inline_query', async ctx => {
