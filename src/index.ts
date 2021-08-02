@@ -151,9 +151,16 @@ bot.command('weather', async ctx =>
   ctx.reply(await getWeather(ctx.update.message.text.split(' ')[1])),
 );
 
-bot.command('susu', async ctx =>
-  ctx.reply('SUSU/USD=' + (await getSusu('USD'))),
-);
+bot.command('susu', async ctx => {
+  let currency = 'USD';
+  try {
+    currency = ctx.update.message.text.split(' ')[1];
+  } catch {}
+  if (currency !== 'USD' && currency !== 'EUR') {
+    currency = 'USD';
+  }
+  ctx.reply(`SUSU/${currency}=${await getSusu(currency)}`);
+});
 
 bot.on('inline_query', async ctx => {
   console.log(ctx.inlineQuery.query);

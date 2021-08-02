@@ -32,7 +32,8 @@ const getSusu = async (currency = 'USD'): Promise<number> => {
 };
 
 async function main() {
-  console.log('SUSU/USD=' + (await getSusu('USD')));
+  const currency = 'USD';
+  console.log(`SUSU/${currency}=${await getSusu(currency)}`);
 }
 
 main()
