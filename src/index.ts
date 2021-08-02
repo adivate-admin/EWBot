@@ -53,7 +53,7 @@ const getSusu = async (currency = 'USD'): Promise<number> => {
   };
 
   const response = await axios(config);
-  const responseJson: any = JSON.parse(response.data);
+  const responseJson: any = response.data;
   return responseJson.rate;
 };
 
