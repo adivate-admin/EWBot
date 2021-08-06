@@ -94,8 +94,7 @@ const loadCurrencies = async (): Promise<CurrencyList> => {
     {},
     config,
   );
-  const responseJson: any = response.data;
-  return responseJson.rate;
+  return response.data;
 };
 
 let supportedCurrencies: CurrencyList;
