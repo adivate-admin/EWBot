@@ -208,8 +208,13 @@ const runPrice = async (
   if (!isValidCurrency(currency)) {
     return "Sorry, don't know that currency...";
   }
+  const currencySymbol = supportedCurrencies.filter(c => c.code === currency)[0]
+    .symbol;
   try {
-    return `$[token}/${currency}=${round(await getPrice(token, currency), 3)}`;
+    return `${token}/${currency}=${currencySymbol}${round(
+      await getPrice(token, currency),
+      3,
+    )}`;
   } catch (error) {
     console.log('Error getting price...' + error.message);
     return 'Error getting price';
