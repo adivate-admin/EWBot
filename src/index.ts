@@ -60,6 +60,40 @@ const getPrice = async (symbol = 'EWT', currency = 'USD'): Promise<number> => {
   return responseJson.rate;
 };
 
+type CurrencyEntry = {
+  code: string;
+  countries: string[];
+  flag: string;
+  name: string;
+  symbol: string;
+};
+type CurrencyList = CurrencyEntry[];
+
+const loadCurrencies = async (): Promise<CurrencyList> => {
+  console.log(`Getting all currencies...`);
+  const data = JSON.stringify({});
+
+  const config: AxiosRequestConfig = {
+    method: 'post',
+    url: 'https://api.livecoinwatch.com/fiats/all',
+    headers: {
+      'content-type': 'application/json',
+      'x-api-key': process.env['LIVECOINWATCH_API_KEY'],
+    },
+    data: data,
+  };
+
+  const response = await axios(config);
+  const responseJson: any = response.data;
+  return responseJson.rate;
+};
+
+let supportedCurrencies: CurrencyList;
+
+const isValidCurrency = (currency: string): boolean => {
+  return supportedCurrencies.filter(c => c.code === currency).length > 0;
+};
+
 const getWeather = async (city: string): Promise<string> => {
   console.log('Getting weather for: ' + city);
   try {
@@ -154,36 +188,41 @@ bot.command('weather', async ctx =>
   ctx.reply(await getWeather(ctx.update.message.text.split(' ')[1])),
 );
 
-bot.command('susu', async ctx => {
-  let currency = 'USD';
-  try {
-    currency = ctx.update.message.text.split(' ')[1]?.toUpperCase();
-  } catch {}
-  if (!currency) {
-    currency = 'USD';
+const runPrice = async (
+  token: string,
+  currency: string = 'USD',
+): Promise<string> => {
+  currency = currency.toUpperCase();
+  if (!supportedCurrencies) {
+    supportedCurrencies = await loadCurrencies();
   }
-  try {
-    ctx.reply(`SUSU/${currency}=${round(await getPrice('SUSU', currency), 3)}`);
-  } catch (error) {
-    console.log('Error getting price...' + error.message);
+  if (!isValidCurrency(currency)) {
     return "Sorry, don't know that currency...";
   }
+  try {
+    return `$[token}/${currency}=${round(await getPrice(token, currency), 3)}`;
+  } catch (error) {
+    console.log('Error getting price...' + error.message);
+    return 'Error getting price';
+  }
+};
+
+bot.command('susu', async ctx => {
+  let currency = 'USD';
+  const args = ctx.update.message.text.split(' ');
+  if (args.length > 0) {
+    currency = ctx.update.message.text.split(' ')[1]?.toUpperCase();
+  }
+  ctx.reply(await runPrice('SUSU', currency));
 });
 
 bot.command('ewt', async ctx => {
   let currency = 'USD';
-  try {
+  const args = ctx.update.message.text.split(' ');
+  if (args.length > 0) {
     currency = ctx.update.message.text.split(' ')[1]?.toUpperCase();
-  } catch {}
-  if (!currency) {
-    currency = 'USD';
   }
-  try {
-    ctx.reply(`EWT/${currency}=${round(await getPrice('EWT', currency), 3)}`);
-  } catch (error) {
-    console.log('Error getting price...' + error.message);
-    return "Sorry, don't know that currency...";
-  }
+  ctx.reply(await runPrice('EWT', currency));
 });
 
 bot.on('inline_query', async ctx => {
