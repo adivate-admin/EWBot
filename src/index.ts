@@ -19,6 +19,8 @@ const cToK = (c: number) => c + 273.15;
 const kToF = (k: number) => cToF(kToC(k));
 const fToK = (f: number) => cToK(fToC(f));
 
+const SUPPORTED_CURRENCIES = ['USD', 'EUR', 'GBR', 'CAD'];
+
 //const main = async () => {
 const token = process.env['BOT_TOKEN'];
 if (token === undefined) {
@@ -37,6 +39,7 @@ const sayYoMiddleware = fork(ctx => ctx.reply('yo'));
 
 const getPrice = async (symbol = 'EWT', currency = 'USD'): Promise<number> => {
   console.log(`Getting ${symbol} price in ${currency}`);
+  //try {
   const data = JSON.stringify({
     currency: currency,
     code: symbol,
@@ -56,29 +59,32 @@ const getPrice = async (symbol = 'EWT', currency = 'USD'): Promise<number> => {
   const response = await axios(config);
   const responseJson: any = response.data;
   return responseJson.rate;
+  //} catch (error) {
+  //  console.log('Error getting price...' + error.message);
+  //}
 };
 
 const getWeather = async (city: string): Promise<string> => {
   console.log('Getting weather for: ' + city);
-  //try {
-  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${openWeatherApiKey}`;
-  const response: any = await fetch(apiUrl);
-  const responseJson = await response.json();
-  //if (responseJson.weather[0]) {
-  return `Weather in ${responseJson.name}: Temp ${round(
-    kToC(responseJson.main.temp),
-    1,
-  )}C / ${round(kToF(responseJson.main.temp), 1)}F, ${
-    responseJson.weather[0].main
-  } (${responseJson.weather[0].description})`;
-  //} else {
-  //  console.log('City not found...');
-  //  return 'City not found';
-  //}
-  //} catch {
-  //  console.log('Error getting weather...');
-  //  return 'Error getting weather...';
-  //}
+  try {
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${openWeatherApiKey}`;
+    const response: any = await fetch(apiUrl);
+    const responseJson = await response.json();
+    //if (responseJson.weather[0]) {
+    return `Weather in ${responseJson.name}: Temp ${round(
+      kToC(responseJson.main.temp),
+      1,
+    )}C / ${round(kToF(responseJson.main.temp), 1)}F, ${
+      responseJson.weather[0].main
+    } (${responseJson.weather[0].description})`;
+    //} else {
+    //  console.log('City not found...');
+    //  return 'City not found';
+    //}
+  } catch (error) {
+    console.log('Error getting weather...' + error.message);
+    return 'Error getting weather...';
+  }
 };
 
 //const s = getWeather('London').then(s => console.log(s));
@@ -155,9 +161,9 @@ bot.command('weather', async ctx =>
 bot.command('susu', async ctx => {
   let currency = 'USD';
   try {
-    currency = ctx.update.message.text.split(' ')[1];
+    currency = ctx.update.message.text.split(' ')[1]?.toUpperCase();
   } catch {}
-  if (currency !== 'USD' && currency !== 'EUR') {
+  if (!SUPPORTED_CURRENCIES.includes(currency)) {
     currency = 'USD';
   }
   ctx.reply(`SUSU/${currency}=${round(await getPrice('SUSU', currency), 3)}`);
@@ -166,9 +172,9 @@ bot.command('susu', async ctx => {
 bot.command('ewt', async ctx => {
   let currency = 'USD';
   try {
-    currency = ctx.update.message.text.split(' ')[1];
+    currency = ctx.update.message.text.split(' ')[1]?.toUpperCase();
   } catch {}
-  if (currency !== 'USD' && currency !== 'EUR') {
+  if (!SUPPORTED_CURRENCIES.includes(currency)) {
     currency = 'USD';
   }
   ctx.reply(`EWT/${currency}=${round(await getPrice('EWT', currency), 3)}`);
