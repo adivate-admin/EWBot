@@ -73,7 +73,7 @@ const loadCurrencies = async (): Promise<CurrencyList> => {
   console.log(`Getting all currencies...`);
   const data = JSON.stringify({});
 
-  const config: AxiosRequestConfig = {
+  /* const config: AxiosRequestConfig = {
     method: 'post',
     url: 'https://api.livecoinwatch.com/fiats/all',
     headers: {
@@ -81,9 +81,19 @@ const loadCurrencies = async (): Promise<CurrencyList> => {
       'x-api-key': process.env['LIVECOINWATCH_API_KEY'],
     },
     data: data,
+  }; */
+  const config: AxiosRequestConfig = {
+    headers: {
+      'content-type': 'application/json',
+      'x-api-key': process.env['LIVECOINWATCH_API_KEY'],
+    },
   };
 
-  const response = await axios(config);
+  const response = await axios.post<CurrencyList>(
+    'https://api.livecoinwatch.com/fiats/all',
+    {},
+    config,
+  );
   const responseJson: any = response.data;
   return responseJson.rate;
 };
@@ -207,22 +217,21 @@ const runPrice = async (
   }
 };
 
-bot.command('susu', async ctx => {
+const runSymbol = async (sym: string, ctx: any): Promise<void> => {
   let currency = 'USD';
   const args = ctx.update.message.text.split(' ');
   if (args.length > 0) {
     currency = ctx.update.message.text.split(' ')[1]?.toUpperCase();
   }
-  ctx.reply(await runPrice('SUSU', currency));
+  ctx.reply(await runPrice(sym, currency));
+};
+
+bot.command('susu', async ctx => {
+  await runSymbol('SUSU', ctx);
 });
 
 bot.command('ewt', async ctx => {
-  let currency = 'USD';
-  const args = ctx.update.message.text.split(' ');
-  if (args.length > 0) {
-    currency = ctx.update.message.text.split(' ')[1]?.toUpperCase();
-  }
-  ctx.reply(await runPrice('EWT', currency));
+  await runSymbol('EWT', ctx);
 });
 
 bot.on('inline_query', async ctx => {
