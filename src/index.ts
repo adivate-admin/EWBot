@@ -70,7 +70,7 @@ type CurrencyEntry = {
 type CurrencyList = CurrencyEntry[];
 
 const loadCurrencies = async (): Promise<CurrencyList> => {
-  console.log(`Getting all currencies...`);
+  console.log(`Loading currencies...`);
   const data = JSON.stringify({});
 
   /* const config: AxiosRequestConfig = {
@@ -100,7 +100,7 @@ const loadCurrencies = async (): Promise<CurrencyList> => {
 let supportedCurrencies: CurrencyList;
 
 const isValidCurrency = (currency: string): boolean => {
-  return supportedCurrencies.filter(c => c.code === currency).length > 0;
+  return supportedCurrencies.some(c => c.code === currency);
 };
 
 const getWeather = async (city: string): Promise<string> => {
@@ -208,8 +208,8 @@ const runPrice = async (
   if (!isValidCurrency(currency)) {
     return "Sorry, don't know that currency...";
   }
-  const currencySymbol = supportedCurrencies.filter(c => c.code === currency)[0]
-    .symbol;
+  const currencySymbol =
+    supportedCurrencies.find(c => c.code === currency)?.symbol || '';
   try {
     return `${token}/${currency}=${currencySymbol}${round(
       await getPrice(token, currency),
