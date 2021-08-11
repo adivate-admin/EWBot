@@ -61,7 +61,8 @@
             "unicorn/no-abusive-eslint-disable": "off",
             "padding-line-between-statements": "Off",
             "@typescript-eslint/no-implicit-any-catch": "off",
-            "@typescript-eslint/restrict-template-expressions": "off"
+            "@typescript-eslint/restrict-template-expressions": "off",
+            "node/prefer-global/process": "off"
         }
     }
 }
