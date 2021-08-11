@@ -37,7 +37,10 @@ function round(value: number, precision: number) {
 
 const sayYoMiddleware = fork(ctx => ctx.reply('yo'));
 
-const getPrice = async (symbol = 'EWT', currency = 'USD'): Promise<number> => {
+const getPriceFromAPI = async (
+  symbol = 'EWT',
+  currency = 'USD',
+): Promise<number> => {
   console.log(`Getting ${symbol} price in ${currency}`);
   const data = JSON.stringify({
     currency: currency,
@@ -197,7 +200,7 @@ bot.command('weather', async ctx =>
   ctx.reply(await getWeather(ctx.update.message.text.split(' ')[1])),
 );
 
-const runPrice = async (
+const getPrice = async (
   token: string,
   currency: string = 'USD',
 ): Promise<string> => {
@@ -212,7 +215,7 @@ const runPrice = async (
     supportedCurrencies.find(c => c.code === currency)?.symbol || '';
   try {
     return `${token}/${currency}=${currencySymbol}${round(
-      await getPrice(token, currency),
+      await getPriceFromAPI(token, currency),
       3,
     )}`;
   } catch (error) {
@@ -221,21 +224,25 @@ const runPrice = async (
   }
 };
 
-const runSymbol = async (sym: string, ctx: any): Promise<void> => {
+const runSymbol = async (sym: string, ctx: any): Promise<string> => {
   let currency = 'USD';
   const args = ctx.update.message.text.split(' ');
   if (args.length > 0) {
     currency = ctx.update.message.text.split(' ')[1]?.toUpperCase();
   }
-  ctx.reply(await runPrice(sym, currency));
+  return await (await getPrice(sym, currency)).toString();
 };
 
+bot.command('altszn', async ctx => {
+  ctx.reply("That's a fact, jack!");
+});
+
 bot.command('susu', async ctx => {
-  await runSymbol('SUSU', ctx);
+  ctx.reply(await runSymbol('SUSU', ctx));
 });
 
 bot.command('ewt', async ctx => {
-  await runSymbol('EWT', ctx);
+  ctx.reply(await runSymbol('EWT', ctx));
 });
 
 bot.on('inline_query', async ctx => {
