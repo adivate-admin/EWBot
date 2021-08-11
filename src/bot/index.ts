@@ -13,7 +13,7 @@ import { menu } from './menu/index.js';
 const config = dotenv.config();
 dotenvExpand(config);
 
-const token = process.env['BOT_TOKEN'];
+const token = process.env.BOT_TOKEN ?? '';
 if (!token) {
   throw new Error(
     'You have to provide the bot-token from @BotFather via environment variable (BOT_TOKEN)',
@@ -37,7 +37,7 @@ const i18n = new TelegrafI18n({
 
 bot.use(i18n.middleware());
 
-if (process.env['NODE_ENV'] !== 'production') {
+if ((process.env.NODE_ENV ?? '') !== 'production') {
   // Show what telegram updates (messages, button clicks, ...) are happening (only in development)
   bot.use(generateUpdateMiddleware());
 }
