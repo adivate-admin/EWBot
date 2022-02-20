@@ -240,11 +240,11 @@ const runSymbol = async (sym: string, ctx: any): Promise<void> => {
 };
 /* eslint-enable */
 
-bot.command(
+/* bot.command(
   'altszn',
   async ctx => ctx.reply("That's a fact, Jack!"),
   // ctx.reply("Sorry Bro...It's Been Cancelled"),
-);
+); */
 
 bot.command('susu', async ctx => runSymbol('SUSU', ctx));
 
